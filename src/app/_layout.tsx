@@ -51,6 +51,7 @@ const RootLayout = () => {
           name="index"
           options={{ title: "GWeather", headerShown: false }}
         />
+        <Stack.Screen name="Weather" options={{ headerShown: false }} />
       </Stack>
     </>
   );

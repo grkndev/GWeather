@@ -1,11 +1,12 @@
-import * as React from "react"
-import Svg, { G, Path, Defs, LinearGradient, Stop } from "react-native-svg"
+import * as React from "react";
+import Svg, { G, Path, Defs, LinearGradient, Stop } from "react-native-svg";
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 const Clear = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={161}
     height={166}
+
     fill="none"
     {...props}
   >
@@ -86,5 +87,5 @@ const Clear = (props) => (
       </LinearGradient>
     </Defs>
   </Svg>
-)
-export default Clear
+);
+export default Clear;

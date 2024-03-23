@@ -1,14 +1,14 @@
 import { View, Text, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import AutoComplate, { City } from "../AutoComplate";
-
+import { useNavigation } from "expo-router";
 export default function WeatherInput() {
+  const navigation = useNavigation();
   const [inputValue, setInput] = useState<string>("");
   const [outputValue, setOutput] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const onCityReceived = (city: City) => {
-    console.log(city);
-    setLoading(true);
+    navigation.navigate("Weather", { city });
+
   };
   const debouncedValue = useDebounce(inputValue, 150);
 

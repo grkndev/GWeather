@@ -1,6 +1,7 @@
-import { View, Text, FlatList, Pressable } from "react-native";
+import { View, Text, FlatList, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
+import * as Location from "expo-location";
 const BASEURL =
   "https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=192f8cb1644bb6e824e1968bec6113a9";
 export type City = {
@@ -23,7 +24,6 @@ export default function AutoComplate({
     fetch(BASEURL.replace("{{CITY_NAME}}", cityname))
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         setData(data);
       });
   }, [cityname]);
@@ -32,7 +32,31 @@ export default function AutoComplate({
       <FlashList
         data={data}
         estimatedItemSize={14}
-        
+        ListHeaderComponent={
+          <Pressable
+            onPress={async () => {
+              let { status } =
+                await Location.requestForegroundPermissionsAsync();
+              if (status !== "granted") {
+                Alert.alert("Permission to access location was denied");
+                return;
+              }
+              let location = await Location.getCurrentPositionAsync({});
+              onCitySelected({
+                lat: location.coords.latitude,
+                lon: location.coords.longitude,
+                name: "Current Location",
+                country: "",
+                local_names: {},
+              });
+            }}
+            className="bg-gray-700 p-2 rounded my-1"
+          >
+            <Text className="text-white text-sm text-center">
+              Current Location
+            </Text>
+          </Pressable>
+        }
         renderItem={({ item }) => (
           <Pressable
             onPress={() => onCitySelected(item)}

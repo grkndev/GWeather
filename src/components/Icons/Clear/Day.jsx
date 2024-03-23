@@ -13,6 +13,7 @@ const Clear = (props) => (
     xmlns="http://www.w3.org/2000/svg"
     width={225}
     height={220}
+    viewBox="0 0 225 220"
     fill="none"
     {...props}
   >
