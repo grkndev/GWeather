@@ -10,6 +10,7 @@ import {
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
 import AnimatedSplashScreen from "@/components/AnimatedSplashScreen/index";
+import { StatusBar } from "expo-status-bar";
 
 // SplashScreen.preventAutoHideAsync();
 const RootLayout = () => {
@@ -43,12 +44,15 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ title: "GWeather", headerShown: false }}
-      />
-    </Stack>
+    <>
+      <StatusBar style="light" />
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{ title: "GWeather", headerShown: false }}
+        />
+      </Stack>
+    </>
   );
 };
 
