@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
@@ -20,6 +21,7 @@ import {
   Wind,
   IconContext,
   StarFour,
+  Sun,
 } from "phosphor-react-native";
 import { FlashList } from "@shopify/flash-list";
 const BASE_URL = `https://api.openweathermap.org/data/2.5`;
@@ -50,6 +52,15 @@ export type WeatherForecast = {
   main: MainWeather;
   dt: number;
 };
+
+const data = [
+  { title: "Temperature", value: "26ºc", icon: <ThermometerSimple /> },
+  { title: "Rain %", value: "0%", icon: <CloudRain /> },
+  { title: "Wind", value: "8 km/h", icon: <Wind /> },
+  { title: "Humidity", value: "40%", icon: <Drop /> },
+  { title: "UV Index", value: "5", icon: <Sun /> },
+];
+
 export default function Weather() {
   const navigation = useNavigation();
   //   const [weather, setWeather] = useState<Weather>();
@@ -62,7 +73,11 @@ export default function Weather() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-900 p-4 ">
-      <ScrollView className="flex flex-1 flex-col gap-y-2 rounded-xl">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        horizontal={false}
+        className="flex flex-1 flex-col gap-y-2 rounded-xl"
+      >
         <View className="bg-gray-800 p-4 w-full aspect-square rounded-xl">
           <ImageBackground
             resizeMode="stretch"
@@ -71,9 +86,9 @@ export default function Weather() {
             className="w-full h-full rounded-xl overflow-hidden"
             source={require("@assets/Backgorunds/Clear/night.png")}
           >
-            <View className="p-6 flex flex-col items-start justify-between h-full w-full">
+            <View className="p-7 flex flex-col items-start justify-between h-full w-full">
               <View className="flex flex-col">
-                <Text className="text-white font-semibold text-2xl">
+                <Text className="text-white font-semibold text-[8vw]">
                   Istanbul, TR
                 </Text>
                 <Text className="text-white">Monday, May 15, 2023</Text>
@@ -81,7 +96,9 @@ export default function Weather() {
 
               <View className="w-full flex flex-row justify-between items-center">
                 <View className="gap-y-1">
-                  <Text className="text-white text-5xl font-bold">28ºc</Text>
+                  <Text style={{
+                    // fontSize: Dimensions.get("screen").width / 8,
+                  }} className="text-white font-bold  text-[15vw]">28ºc</Text>
                   <View>
                     <Text className="text-white font-semibold">
                       26ºc / 32ºc
@@ -89,24 +106,14 @@ export default function Weather() {
                     <Text className="text-white">Few Clouds</Text>
                   </View>
                 </View>
-                <View>
+                <View className="left-8">
                   <Icons name="Clear" type="night" />
                 </View>
               </View>
             </View>
           </ImageBackground>
         </View>
-        <View className="bg-gray-800 w-full p-4 justify-center items-start">
-          {/* AI generated suggestion */}
-          <View className="flex flex-row justify-center items-center gap-x-2">
-            <StarFour weight="light" color="limegreen" size={16} />
-            <Text className="text-white text-sm font-light ">Suggestion</Text>
-          </View>
-          <View className="mt-2">
-            <Text className="text-white ">Wear a jacket</Text>
-          </View>
-        </View>
-        <View className="bg-gray-800 w-full h-72 rounded-xl p-4 justify-center items-center">
+        <View className="bg-gray-800 w-full rounded-xl p-4 justify-center items-center">
           <IconContext.Provider
             value={{
               color: "#3b3b54",
@@ -115,17 +122,8 @@ export default function Weather() {
             }}
           >
             <FlatList
-              data={[
-                {
-                  title: "Temperature",
-                  value: "28ºc",
-                  icon: <ThermometerSimple />,
-                },
-                { title: "Humidity", value: "28%", icon: <Drop /> },
-                { title: "Wind", value: "28km/h", icon: <Wind /> },
-                { title: "Pressure", value: "28hPa", icon: <SunDim /> },
-                { title: "Visibility", value: "28km", icon: <CloudRain /> },
-              ]}
+              horizontal
+              data={data}
               renderItem={({ item }) => (
                 <DetailView
                   title={item.title}
@@ -133,19 +131,14 @@ export default function Weather() {
                   icon={item.icon}
                 />
               )}
-              className="w-full h-full"
+              className="w-full"
               contentContainerStyle={{
-                justifyContent: "space-between",
+                justifyContent: "space-around",
+
+                alignItems: "center",
                 flex: 1,
-                gap: 4,
+                gap: 10,
               }}
-              // border after each item
-              ItemSeparatorComponent={() => (
-                <View
-                  className="w-full h-[2px] bg-gray-700"
-                  style={{ opacity: 0.5 }}
-                />
-              )}
             />
           </IconContext.Provider>
         </View>
@@ -159,11 +152,22 @@ export default function Weather() {
             contentContainerStyle={{
               paddingHorizontal: 12,
               paddingVertical: 10,
-              justifyContent: "space-between",
+              justifyContent: "space-around",
               alignItems: "center",
               flex: 1,
             }}
           />
+        </View>
+        
+        <View className="bg-gray-800 w-full p-4 justify-center items-start rounded-xl">
+          {/* AI generated suggestion */}
+          <View className="flex flex-row justify-center items-center gap-x-2 ">
+            <StarFour weight="light" color="limegreen" size={16} />
+            <Text className="text-white text-sm font-light ">Suggestion</Text>
+          </View>
+          <View className="mt-2">
+            <Text className="text-white ">Wear a jacket</Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -180,13 +184,15 @@ const DetailView = ({
   icon: React.JSX.Element;
 }) => {
   return (
-    <View className="flex flex-row justify-between items-center p-2 ">
-      <View className="flex flex-row items-center gap-x-2">
+    <View className="flex flex-col items-center p-2 justify-center gap-y-1">
+      <View className="flex flex-col gap-x-2 items-center justify-center">
         {icon}
-        <Text className="text-gray-500 font-bold text-lg">{title}</Text>
+        <Text className="text-gray-500 font-bold text-wrap flex-wrap flex w-20 text-center text-[10px]">
+          {title}
+        </Text>
       </View>
       <View>
-        <Text className="text-white text-xl font-bold">{value}</Text>
+        <Text className="text-white text-xs font-bold">{value}</Text>
       </View>
     </View>
   );
