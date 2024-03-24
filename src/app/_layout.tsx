@@ -45,7 +45,7 @@ const RootLayout = () => {
     };
   }, [fontLoaded, fonterr]);
 
-  if(!isConnected) {
+  if(isConnected) {
     return <NoConnection />;
   }
   if (!appReady || !splashAnimationFinished) {
