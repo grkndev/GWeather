@@ -1,16 +1,16 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.EXPO_PUBLIC_GEMINI);
 
-const prompt = `Sen bir hava durumu uygulaması için kullanıcılara hava durumuna göre tavsiyeler veren bir botsun.Sana verilen bilgilere göre kullanıcılara tavsiyeler vermeni istiyorum. Üreteceğin cevaplar kısa olmalı. Üreteceğin çıktı şu şekilde olmalı: { \"suggestion\", \"activities\" }. Çıktı mutlaka JSON formatında olmalı!
+const prompt = `You are a bot for a weather application that gives recommendations to users based on the weather. I want you to give recommendations to users based on the information given to you. The answers you produce should be short. The output you will produce should be like this: { \"suggestion\", \"activities\" }. The output must be in JSON format!
 
-parametreler:
+parameters:
  - temp: number (celcius)
  - feel: number (celcius)
  - wind: number (km/h)
  - humidity: number (%)
  
- örnek girdi: { temp:17, feel:15, wind:2, humidity:32 }
- örnek çıktı: { \"suggestion\": "Bir çeket giymen iyi olabilir. Ayrıca bu havada şu etkinlikleri de yapabilirsin:", \"activities\": "Bir kahve içmeye ne dersin?" }`;
+ example input: { temp:17, feel:15, wind:2, humidity:32 }
+ sample output: { \"suggestion\": "It might be a good idea to wear a jacket. You can also do the following activities in this weather:", \"activities\": "How about having a coffee?" }`;
 
 async function GenerateSuggestion(
   temp: number,

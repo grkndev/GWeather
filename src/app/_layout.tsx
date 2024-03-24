@@ -11,11 +11,15 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import AnimatedSplashScreen from "@/components/AnimatedSplashScreen/index";
 import { StatusBar } from "expo-status-bar";
+import NetInfo from "@react-native-community/netinfo";
+import NoConnection from "@/components/NoConnection";
 
 // SplashScreen.preventAutoHideAsync();
 const RootLayout = () => {
   const [appReady, setAppReady] = useState(false);
   const [splashAnimationFinished, setSplashAnimationFinished] = useState(false);
+
+  const [isConnected, setIsConnected] = useState<boolean | null>(false);
 
   const [fontLoaded, fonterr] = useFonts({
     Nunito: Nunito_400Regular,
@@ -25,12 +29,25 @@ const RootLayout = () => {
   });
 
   useEffect(() => {
+    NetInfo.fetch().then((state) => {
+      setIsConnected(state.isConnected);
+    });
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+    });
     if (fontLoaded || fonterr) {
       SplashScreen.hideAsync();
       setAppReady(true);
     }
+
+    return () => {
+      unsubscribe();
+    };
   }, [fontLoaded, fonterr]);
 
+  if(!isConnected) {
+    return <NoConnection />;
+  }
   if (!appReady || !splashAnimationFinished) {
     return (
       <AnimatedSplashScreen
