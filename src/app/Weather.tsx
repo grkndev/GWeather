@@ -24,6 +24,7 @@ import {
   Sun,
 } from "phosphor-react-native";
 import dayjs from "dayjs";
+import GenerateSuggestion from "@/components/Suggestion/GeminiAPI";
 const BASE_URL = `https://api.openweathermap.org/data/2.5`;
 
 type MainWeather = {
@@ -64,19 +65,15 @@ export type WeatherForecast = {
   dt: number;
 };
 
-const data = [
-  { title: "Temperature", value: "26ºc", icon: <ThermometerSimple /> },
-  { title: "Rain %", value: "0%", icon: <CloudRain /> },
-  { title: "Wind", value: "8 km/h", icon: <Wind /> },
-  { title: "Humidity", value: "40%", icon: <Drop /> },
-  { title: "UV Index", value: "5", icon: <Sun /> },
-];
-
 export default function Weather() {
   const navigation = useNavigation();
   const [weather, setWeather] = useState<Weather>();
   const [forecast, setForecast] = useState<WeatherForecast[]>();
   const [errorMsg, setErrorMsg] = useState<string>();
+  const [suggestion, setSuggestion] = useState<{
+    suggestion: string;
+    activities: string[];
+  }>();
   const { city }: { city: City } = navigation
     .getState()
     .routes.find((route) => route.name === "Weather")?.params;
@@ -88,8 +85,6 @@ export default function Weather() {
     ).json();
 
     setForecast(res.list);
-    console.log(JSON.stringify(res, null, 2));
-    console.log(res.list.length)
   };
   async function getWeather() {
     const res = await (
@@ -99,7 +94,16 @@ export default function Weather() {
     ).json();
 
     setWeather(res);
-   
+    if (!res) return;
+    const sugg = await GenerateSuggestion(
+      res.main.temp,
+      res.main.feels_like,
+      res.wind.speed,
+      res.main.humidity
+    );
+    // console.log(JSON.stringify(sugg, null, 2))
+    // console.log("JSON:", JSON.parse(sugg))
+    setSuggestion(JSON.parse(sugg));
   }
   useEffect(() => {
     getWeather();
@@ -220,7 +224,9 @@ export default function Weather() {
             renderItem={({ item }) => <ForecastView forecast={item} />}
             className="w-full h-full"
             CellRendererComponent={({ children }) => {
-              return <View className="flex flex-row gap-x-2 p-2">{children}</View>;
+              return (
+                <View className="flex flex-row gap-x-2 p-2">{children}</View>
+              );
             }}
             contentContainerStyle={{
               paddingHorizontal: 12,
@@ -248,7 +254,18 @@ export default function Weather() {
             <Text className="text-white text-sm font-light ">Suggestion</Text>
           </View>
           <View className="mt-2">
-            <Text className="text-white ">Wear a jacket</Text>
+            {suggestion ? (
+              <View>
+                <Text className="text-white text-sm font-semibold">
+                  {suggestion.suggestion}
+                </Text>
+                <Text className="text-white text-sm font-light">
+                  {suggestion.activities}
+                </Text>
+              </View>
+            ) : (
+              <ActivityIndicator />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -280,20 +297,22 @@ const DetailView = ({
   );
 };
 
-const ForecastView = ({
-  forecast,
-}: {
-  forecast: WeatherForecast;
-}) => {
+const ForecastView = ({ forecast }: { forecast: WeatherForecast }) => {
   return (
     <View className="flex flex-col justify-between items-center p-2 mx-2 rounded-xl">
       <View className="flex flex-row items-center gap-x-2">
-        <Text className="text-gray-200 font-bold text-xs">{dayjs(forecast.dt * 1000).format("ddd")}</Text>
+        <Text className="text-gray-200 font-bold text-xs">
+          {dayjs(forecast.dt * 1000).format("ddd")}
+        </Text>
       </View>
       <View>{/* <Icons name="Clear" type="day" /> */}</View>
       <View className="flex flex-col items-center justify-center">
-        <Text className="text-white text-lg font-bold">{Math.round(forecast.main.temp)}ºc</Text>
-        <Text className="text-gray-400 text-xs font-bold">{dayjs(forecast.dt * 1000).format("HH:mm")}</Text>
+        <Text className="text-white text-lg font-bold">
+          {Math.round(forecast.main.temp)}ºc
+        </Text>
+        <Text className="text-gray-400 text-xs font-bold">
+          {dayjs(forecast.dt * 1000).format("HH:mm")}
+        </Text>
       </View>
     </View>
   );
