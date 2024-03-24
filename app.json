@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.gweepcreative.GWeather"
+      "package": "com.gweepcreative.GWeather",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
