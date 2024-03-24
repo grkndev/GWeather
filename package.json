@@ -12,6 +12,7 @@
     "@expo-google-fonts/nunito": "^0.2.3",
     "@phosphor-icons/react": "^2.0.15",
     "@shopify/flash-list": "1.6.3",
+    "dayjs": "^1.11.10",
     "expo": "~50.0.14",
     "expo-constants": "~15.4.5",
     "expo-linking": "~6.2.2",

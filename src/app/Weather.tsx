@@ -6,24 +6,24 @@ import {
   ScrollView,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import { City } from "@/components/AutoComplate";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
-import Icons from "@/components/Icons";
+import Icons, { WeatherBackground } from "@/components/Icons";
 import {
   ThermometerSimple,
   Drop,
-  SunDim,
   CloudRain,
   Wind,
   IconContext,
   StarFour,
   Sun,
 } from "phosphor-react-native";
-import { FlashList } from "@shopify/flash-list";
+import dayjs from "dayjs";
 const BASE_URL = `https://api.openweathermap.org/data/2.5`;
 
 type MainWeather = {
@@ -39,6 +39,17 @@ type MainWeather = {
 type Weather = {
   name: string;
   main: MainWeather;
+  wind: {
+    speed: number;
+  };
+  rain: {
+    "1h": number;
+  };
+  sys: {
+    type: number;
+    id: number;
+    country: string;
+  };
   weather: [
     {
       id: string;
@@ -63,14 +74,37 @@ const data = [
 
 export default function Weather() {
   const navigation = useNavigation();
-  //   const [weather, setWeather] = useState<Weather>();
-  //   const [forecast, setForecast] = useState<WeatherForecast[]>();
-  //   const [errorMsg, setErrorMsg] = useState<string>();
-
+  const [weather, setWeather] = useState<Weather>();
+  const [forecast, setForecast] = useState<WeatherForecast[]>();
+  const [errorMsg, setErrorMsg] = useState<string>();
   const { city }: { city: City } = navigation
     .getState()
     .routes.find((route) => route.name === "Weather")?.params;
+  const fetchForecast = async () => {
+    const res = await (
+      await fetch(
+        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
+      )
+    ).json();
 
+    setForecast(res.list);
+  };
+  async function getWeather() {
+    const res = await (
+      await fetch(
+        `${BASE_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
+      )
+    ).json();
+
+    setWeather(res);
+    console.log(JSON.stringify(res, null, 2));
+  }
+  useEffect(() => {
+    getWeather();
+    fetchForecast();
+  }, []);
+  if (!weather) return <ActivityIndicator />;
+  // console.log(weather.weather[0].icon.replace(/[dn]/g, ""))
   return (
     <SafeAreaView className="flex-1 bg-gray-900 p-4 ">
       <ScrollView
@@ -79,39 +113,50 @@ export default function Weather() {
         className="flex flex-1 flex-col gap-y-2 rounded-xl"
       >
         <View className="bg-gray-800 p-4 w-full aspect-square rounded-xl">
-          <ImageBackground
-            resizeMode="stretch"
-            height={1000}
-            width={1000}
-            className="w-full h-full rounded-xl overflow-hidden"
-            source={require("@assets/Backgorunds/Clear/night.png")}
-          >
+          <WeatherBackground name={weather.weather[0].icon}>
             <View className="p-7 flex flex-col items-start justify-between h-full w-full">
               <View className="flex flex-col">
                 <Text className="text-white font-semibold text-[8vw]">
-                  Istanbul, TR
+                  {weather.name}, {weather.sys.country}
                 </Text>
-                <Text className="text-white">Monday, May 15, 2023</Text>
+                <Text className="text-white">
+                  {dayjs(new Date()).format("dddd, MMM D, YYYY")}
+                </Text>
+                {/* <Text className="text-white">Monday, May 15, 2023</Text> */}
               </View>
 
               <View className="w-full flex flex-row justify-between items-center">
                 <View className="gap-y-1">
-                  <Text style={{
-                    // fontSize: Dimensions.get("screen").width / 8,
-                  }} className="text-white font-bold  text-[15vw]">28ºc</Text>
+                  <Text
+                    style={
+                      {
+                        // fontSize: Dimensions.get("screen").width / 8,
+                      }
+                    }
+                    className="text-white font-bold  text-[15vw]"
+                  >
+                    {Math.round(weather.main.temp)}ºc
+                  </Text>
                   <View>
                     <Text className="text-white font-semibold">
-                      26ºc / 32ºc
+                      {Math.round(weather.main.temp_min)}ºc /{" "}
+                      {Math.round(weather.main.temp_max)}ºc
                     </Text>
                     <Text className="text-white">Few Clouds</Text>
                   </View>
                 </View>
-                <View className="left-8">
-                  <Icons name="Clear" type="night" />
+                <View className="">
+                  <Icons
+                    name={weather.weather[0].icon.replace(/[dn]/g, "")}
+                    type={weather.weather[0].icon.charAt(
+                      weather.weather[0].icon.length - 1
+                    )}
+                  />
+                  {/* <Icons name="03" type="d" /> */}
                 </View>
               </View>
             </View>
-          </ImageBackground>
+          </WeatherBackground>
         </View>
         <View className="bg-gray-800 w-full rounded-xl p-4 justify-center items-center">
           <IconContext.Provider
@@ -121,7 +166,30 @@ export default function Weather() {
               weight: "light",
             }}
           >
-            <FlatList
+            <View className="flex flex-row justify-around w-full">
+              <DetailView
+                title={"Temperature"}
+                value={`${Math.round(weather.main.temp)}ºc`}
+                icon={<ThermometerSimple />}
+              />
+              <DetailView
+                title="Feels Like"
+                value={`${Math.round(weather.main.feels_like)}ºc`}
+                icon={<ThermometerSimple />}
+              />
+              {/* <DetailView title={"Rain %"} value={"0%"} icon={<CloudRain />} /> */}
+              <DetailView
+                title={"Wind"}
+                value={`${weather.wind.speed} km/h`}
+                icon={<Wind />}
+              />
+              <DetailView
+                title={"Humidity"}
+                value={`${weather.main.humidity}%`}
+                icon={<Drop />}
+              />
+            </View>
+            {/* <FlatList
               horizontal
               data={data}
               renderItem={({ item }) => (
@@ -139,7 +207,7 @@ export default function Weather() {
                 flex: 1,
                 gap: 10,
               }}
-            />
+            /> */}
           </IconContext.Provider>
         </View>
         {/* forecast */}
@@ -158,7 +226,7 @@ export default function Weather() {
             }}
           />
         </View>
-        
+
         <View className="bg-gray-800 w-full p-4 justify-center items-start rounded-xl">
           {/* AI generated suggestion */}
           <View className="flex flex-row justify-center items-center gap-x-2 ">
