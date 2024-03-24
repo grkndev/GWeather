@@ -83,11 +83,13 @@ export default function Weather() {
   const fetchForecast = async () => {
     const res = await (
       await fetch(
-        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
+        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&cnt=10&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
       )
     ).json();
 
     setForecast(res.list);
+    console.log(JSON.stringify(res, null, 2));
+    console.log(res.list.length)
   };
   async function getWeather() {
     const res = await (
@@ -97,14 +99,13 @@ export default function Weather() {
     ).json();
 
     setWeather(res);
-    console.log(JSON.stringify(res, null, 2));
+   
   }
   useEffect(() => {
     getWeather();
     fetchForecast();
   }, []);
   if (!weather) return <ActivityIndicator />;
-  // console.log(weather.weather[0].icon.replace(/[dn]/g, ""))
   return (
     <SafeAreaView className="flex-1 bg-gray-900 p-4 ">
       <ScrollView
@@ -214,17 +215,30 @@ export default function Weather() {
         <View className="bg-gray-800 rounded-xl h-24 w-full">
           <FlatList
             horizontal
-            data={[1, 2, 3, 4, 5]}
-            renderItem={({ item }) => <ForecastView />}
+            showsHorizontalScrollIndicator={false}
+            data={forecast}
+            renderItem={({ item }) => <ForecastView forecast={item} />}
             className="w-full h-full"
+            CellRendererComponent={({ children }) => {
+              return <View className="flex flex-row gap-x-2 p-2">{children}</View>;
+            }}
             contentContainerStyle={{
               paddingHorizontal: 12,
               paddingVertical: 10,
               justifyContent: "space-around",
               alignItems: "center",
-              flex: 1,
+              // flex: 1,
             }}
           />
+          {/* <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="flex flex-row gap-x-2 p-2"
+          >
+            {forecast?.map((forecast,index) => (
+              <ForecastView key={index} />
+            ))}
+          </ScrollView> */}
         </View>
 
         <View className="bg-gray-800 w-full p-4 justify-center items-start rounded-xl">
@@ -266,16 +280,20 @@ const DetailView = ({
   );
 };
 
-const ForecastView = () => {
+const ForecastView = ({
+  forecast,
+}: {
+  forecast: WeatherForecast;
+}) => {
   return (
-    <View className="flex flex-col justify-between items-center p-2  rounded-xl">
+    <View className="flex flex-col justify-between items-center p-2 mx-2 rounded-xl">
       <View className="flex flex-row items-center gap-x-2">
-        <Text className="text-gray-200 font-bold text-lg">Mon</Text>
+        <Text className="text-gray-200 font-bold text-xs">{dayjs(forecast.dt * 1000).format("ddd")}</Text>
       </View>
       <View>{/* <Icons name="Clear" type="day" /> */}</View>
-      <View className="flex flex-col">
-        <Text className="text-white text-xs font-bold">28ºc</Text>
-        <Text className="text-gray-400 text-xs font-bold">28ºc</Text>
+      <View className="flex flex-col items-center justify-center">
+        <Text className="text-white text-lg font-bold">{Math.round(forecast.main.temp)}ºc</Text>
+        <Text className="text-gray-400 text-xs font-bold">{dayjs(forecast.dt * 1000).format("HH:mm")}</Text>
       </View>
     </View>
   );
