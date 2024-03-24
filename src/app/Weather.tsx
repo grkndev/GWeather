@@ -1,27 +1,21 @@
 import {
   View,
   Text,
-  ImageBackground,
-  Image,
   ScrollView,
-  FlatList,
-  Dimensions,
+  FlatList, 
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useNavigation, router } from "expo-router";
+import { useNavigation } from "expo-router";
 import { City } from "@/components/AutoComplate";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as Location from "expo-location";
 import Icons, { WeatherBackground } from "@/components/Icons";
 import {
   ThermometerSimple,
   Drop,
-  CloudRain,
   Wind,
   IconContext,
   StarFour,
-  Sun,
 } from "phosphor-react-native";
 import dayjs from "dayjs";
 import GenerateSuggestion from "@/components/Suggestion/GeminiAPI";
@@ -97,8 +91,6 @@ export default function Weather() {
       res.wind.speed,
       res.main.humidity
     );
-    // console.log(JSON.stringify(sugg, null, 2))
-    // console.log("JSON:", JSON.parse(sugg))
     setSuggestion(JSON.parse(sugg));
   }
   useEffect(() => {
@@ -128,19 +120,11 @@ export default function Weather() {
                 <Text className="text-white">
                   {dayjs(new Date()).format("dddd, MMM D, YYYY")}
                 </Text>
-                {/* <Text className="text-white">Monday, May 15, 2023</Text> */}
               </View>
 
               <View className="w-full flex flex-row justify-between items-center">
                 <View className="gap-y-1">
-                  <Text
-                    style={
-                      {
-                        // fontSize: Dimensions.get("screen").width / 8,
-                      }
-                    }
-                    className="text-white font-bold  text-[15vw]"
-                  >
+                  <Text className="text-white font-bold  text-[15vw]">
                     {Math.round(weather.main.temp)}ºc
                   </Text>
                   <View>
@@ -158,7 +142,6 @@ export default function Weather() {
                       weather.weather[0].icon.length - 1
                     )}
                   />
-                  {/* <Icons name="03" type="d" /> */}
                 </View>
               </View>
             </View>
@@ -183,7 +166,6 @@ export default function Weather() {
                 value={`${Math.round(weather.main.feels_like)}ºc`}
                 icon={<ThermometerSimple />}
               />
-              {/* <DetailView title={"Rain %"} value={"0%"} icon={<CloudRain />} /> */}
               <DetailView
                 title={"Wind"}
                 value={`${weather.wind.speed} km/h`}
@@ -195,25 +177,6 @@ export default function Weather() {
                 icon={<Drop />}
               />
             </View>
-            {/* <FlatList
-              horizontal
-              data={data}
-              renderItem={({ item }) => (
-                <DetailView
-                  title={item.title}
-                  value={item.value}
-                  icon={item.icon}
-                />
-              )}
-              className="w-full"
-              contentContainerStyle={{
-                justifyContent: "space-around",
-
-                alignItems: "center",
-                flex: 1,
-                gap: 10,
-              }}
-            /> */}
           </IconContext.Provider>
         </View>
         {/* forecast */}
@@ -234,18 +197,8 @@ export default function Weather() {
               paddingVertical: 10,
               justifyContent: "space-around",
               alignItems: "center",
-              // flex: 1,
             }}
           />
-          {/* <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="flex flex-row gap-x-2 p-2"
-          >
-            {forecast?.map((forecast,index) => (
-              <ForecastView key={index} />
-            ))}
-          </ScrollView> */}
         </View>
 
         <View className="bg-gray-800 w-full p-4 justify-center items-start rounded-xl">
@@ -306,7 +259,6 @@ const ForecastView = ({ forecast }: { forecast: WeatherForecast }) => {
           {dayjs(forecast.dt * 1000).format("ddd")}
         </Text>
       </View>
-      <View>{/* <Icons name="Clear" type="day" /> */}</View>
       <View className="flex flex-col items-center justify-center">
         <Text className="text-white text-lg font-bold">
           {Math.round(forecast.main.temp)}ºc
