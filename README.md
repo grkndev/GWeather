@@ -14,7 +14,7 @@ Bu proje React Native staj başvurusu için yapılmıştır.
 - Yapay zeka tarafında daha güncel ve kullanışlı olduğundan [Google Gemini AI](https://gemini.google.com/app) tercih edilmiştir. 
 
 ## Snack
-- Expo Snack TypeScript vb. bazı kütüphaneleri çalıştırmadığı için paylaşılmamıştır. Projeyi cihazınıza kurup çalıştırmanız tavsiye edilir. 
+- Expo Snack, TypeScript vb. bazı kütüphaneleri çalıştırmadığı için paylaşılmamıştır. Projeyi cihazınıza kurup çalıştırmanız tavsiye edilir. 
 
 ## Kurulum
 Bu proje için sisteminizde Expo CLI bulunması gerekmektedir. Detaylı bilgi [Expo CLI](https://docs.expo.dev/more/expo-cli/)
