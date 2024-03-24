@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import * as Location from "expo-location";
 const BASEURL =
-  "https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}";
+  `https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}`;
 export type City = {
   country: string;
   lat: number;
@@ -29,6 +29,7 @@ export default function AutoComplate({
   }, [cityname]);
   return (
     <View className="w-3/4 h-full">
+      
       <FlashList
         data={data}
         estimatedItemSize={14}

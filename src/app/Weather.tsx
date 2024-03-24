@@ -260,11 +260,11 @@ export default function Weather() {
                   {suggestion.suggestion}
                 </Text>
                 <Text className="text-white text-sm font-light">
-                  {suggestion.activities}
+                  - {suggestion.activities}
                 </Text>
               </View>
             ) : (
-              <ActivityIndicator />
+              <ActivityIndicator color={"limegreen"} />
             )}
           </View>
         </View>
