@@ -132,7 +132,7 @@ export default function Weather() {
                       {Math.round(weather.main.temp_min)}ºc /{" "}
                       {Math.round(weather.main.temp_max)}ºc
                     </Text>
-                    <Text className="text-white">Few Clouds</Text>
+                    <Text className="text-white">{weather.weather[0].description}</Text>
                   </View>
                 </View>
                 <View className="">
