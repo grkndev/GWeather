@@ -31,7 +31,13 @@ Bu aşamadan sonra proje aktif olacaktır. Terminal ekranında görünen QR kodu
 - [Expo Go Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www)
 - [Expo Go AppStore](https://apps.apple.com/us/app/expo-go/id982107779)
 
-  
+## Test Ortamları
+| Cihaz        | Cihaz Tipi           | Durum  |
+| ------------- |:-------------:| -----:|
+| Samsung Galaxy SM-A71      | Fiziksel Android | Başarılı |
+| Samsung Galaxy Tab A8 SM-X200      | Fiziksel Android | Başarılı |
+| Google Pixel 6 Pro API 33      | Android Emulator      |  Başarılı |
+
 ## Uygulama içi görseller
 Android 13 <br />
 
