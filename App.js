@@ -7,5 +7,5 @@ export default function App() {
         This page will not be rendering. Expo App Router automatically rendering src/app dir
       </Text>
     </SafeAreaView>
-  );
+  )
 }
