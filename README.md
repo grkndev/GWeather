@@ -32,8 +32,22 @@ Bu aşamadan sonra proje aktif olacaktır. Terminal ekranında görünen QR kodu
 
   
 ## Uygulama içi görseller
-Android 13
+Android 13 <br />
 
+## Splash Screen
+<img width="300px" src="assets/splash.jpg" />
+
+## Main Screen
+<div>
+  <img width="300px" src="assets/main.jpg" />
+<img width="300px" src="assets/typeing.jpg" />
+</div>
+
+## Weather Screen
+<div>
+<img width="400px" src="assets/tablet.jpg" />
+<img width="300px" src="assets/mobile.jpg" />
+</div>
   
 ## Sosyal Medya
 - X (Twitter) - https://x.com/gweepcreative
