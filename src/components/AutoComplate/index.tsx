@@ -2,6 +2,7 @@ import { View, Text, FlatList, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import * as Location from "expo-location";
+import axios from "axios";
 const BASEURL =
   `https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}`;
 export type City = {
@@ -21,9 +22,8 @@ export default function AutoComplate({
   const [data, setData] = useState<City[]>();
   useEffect(() => {
     if (cityname.length < 3) return setData([]);
-    fetch(BASEURL.replace("{{CITY_NAME}}", cityname))
-      .then((response) => response.json())
-      .then((data) => {
+    axios.get(BASEURL.replace("{{CITY_NAME}}", cityname))
+      .then(({data}) => {
         setData(data);
       });
   }, [cityname]);

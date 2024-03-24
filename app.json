@@ -2,6 +2,7 @@
   "expo": {
     "name": "GWeather",
     "scheme": "GWeather",
+    "description": "A simple weather app built with React Native and Expo",
     "slug": "GWeather",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,19 +17,35 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gweepcreative.GWeather"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gweepcreative.GWeather"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0042f875-f51d-4cf1-90ad-a65d7d078972"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/0042f875-f51d-4cf1-90ad-a65d7d078972"
+    }
   }
 }

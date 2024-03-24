@@ -25,6 +25,7 @@ import {
 } from "phosphor-react-native";
 import dayjs from "dayjs";
 import GenerateSuggestion from "@/components/Suggestion/GeminiAPI";
+import axios from "axios";
 const BASE_URL = `https://api.openweathermap.org/data/2.5`;
 
 type MainWeather = {
@@ -78,21 +79,16 @@ export default function Weather() {
     .getState()
     .routes.find((route) => route.name === "Weather")?.params;
   const fetchForecast = async () => {
-    const res = await (
-      await fetch(
-        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&cnt=10&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
-      )
-    ).json();
+    const res = await axios.get(
+      `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&cnt=10&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
+    );
 
-    setForecast(res.list);
+    setForecast(res.data.list);
   };
   async function getWeather() {
-    const res = await (
-      await fetch(
-        `${BASE_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
-      )
-    ).json();
-
+    const { data: res } = await axios.get(
+      `${BASE_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
+    );
     setWeather(res);
     if (!res) return;
     const sugg = await GenerateSuggestion(
@@ -109,7 +105,12 @@ export default function Weather() {
     getWeather();
     fetchForecast();
   }, []);
-  if (!weather) return <ActivityIndicator />;
+  if (!weather)
+    return (
+      <SafeAreaView className="flex-1 bg-gray-900 p-4 justify-center items-center">
+        <ActivityIndicator color={"limegreen"} />
+      </SafeAreaView>
+    );
   return (
     <SafeAreaView className="flex-1 bg-gray-900 p-4 ">
       <ScrollView
