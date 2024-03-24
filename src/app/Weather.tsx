@@ -80,7 +80,7 @@ export default function Weather() {
   const fetchForecast = async () => {
     const res = await (
       await fetch(
-        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&cnt=10&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
+        `${BASE_URL}/forecast?lat=${city.lat}&lon=${city.lon}&cnt=10&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
       )
     ).json();
 
@@ -89,7 +89,7 @@ export default function Weather() {
   async function getWeather() {
     const res = await (
       await fetch(
-        `${BASE_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=192f8cb1644bb6e824e1968bec6113a9&units=metric`
+        `${BASE_URL}/weather?lat=${city.lat}&lon=${city.lon}&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}&units=metric`
       )
     ).json();
 
