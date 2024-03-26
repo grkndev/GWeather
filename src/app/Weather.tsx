@@ -89,7 +89,8 @@ export default function Weather() {
       res.main.temp,
       res.main.feels_like,
       res.wind.speed,
-      res.main.humidity
+      res.main.humidity,
+      res.weather[0].description
     );
     setSuggestion(JSON.parse(sugg));
   }

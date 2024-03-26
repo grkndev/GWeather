@@ -8,15 +8,17 @@ parameters:
  - feel: number (celcius)
  - wind: number (km/h)
  - humidity: number (%)
+  - weather: string (description of the weather)
  
- example input: { temp:17, feel:15, wind:2, humidity:32 }
+ example input: { temp:17, feel:15, wind:2, humidity:32, weather:"clear sky"}
  sample output: { \"suggestion\": "It might be a good idea to wear a jacket. You can also do the following activities in this weather:", \"activities\": "How about having a coffee?" }`;
 
 async function GenerateSuggestion(
   temp: number,
   feel: number,
   wind: number,
-  humidity: number
+  humidity: number,
+  weather: string
 ) {
   // For text-only input, use the gemini-pro model
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -25,7 +27,7 @@ async function GenerateSuggestion(
 
   const result = await model.generateContent(
     prompt +
-      `\n\n{ temp:${temp}, feel:${feel}, wind:${wind}, humidity:${humidity} }`
+      `\n\n{ temp:${temp}, feel:${feel}, wind:${wind}, humidity:${humidity}, weather:"${weather}" }`
   );
   const response = await result.response;
   const text = response.text();
