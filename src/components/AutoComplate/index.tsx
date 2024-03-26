@@ -61,7 +61,7 @@ export default function AutoComplate({
         renderItem={({ item }) => (
           <Pressable
             onPress={() => onCitySelected(item)}
-            className="bg-gray-500 p-4 rounded my-1"
+            className="bg-gray-600 p-4 rounded my-1"
           >
             <Text className="text-white text-lg">
               {item.name}, {item.country}
