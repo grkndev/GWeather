@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import * as Location from "expo-location";
 import axios from "axios";
-const BASEURL =
-  `https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}`;
+import Animated, { Easing, SlideInLeft, useSharedValue, withTiming } from "react-native-reanimated";
+const BASEURL = `https://api.openweathermap.org/geo/1.0/direct?q={{CITY_NAME}}&limit=5&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_KEY}`;
 export type City = {
   country: string;
   lat: number;
@@ -22,14 +22,14 @@ export default function AutoComplate({
   const [data, setData] = useState<City[]>();
   useEffect(() => {
     if (cityname.length < 3) return setData([]);
-    axios.get(BASEURL.replace("{{CITY_NAME}}", cityname))
-      .then(({data}) => {
-        setData(data);
-      });
+    axios.get(BASEURL.replace("{{CITY_NAME}}", cityname)).then(({ data }) => {
+      setData(data);
+    });
   }, [cityname]);
+
+
   return (
     <View className="w-3/4 h-full">
-      
       <FlashList
         data={data}
         estimatedItemSize={14}

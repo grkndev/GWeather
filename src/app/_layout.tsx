@@ -32,7 +32,7 @@ const RootLayout = () => {
     NetInfo.fetch().then((state) => {
       setIsConnected(state.isConnected);
     });
-    const unsubscribe = NetInfo.addEventListener(state => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
       setIsConnected(state.isConnected);
     });
     if (fontLoaded || fonterr) {
@@ -45,7 +45,7 @@ const RootLayout = () => {
     };
   }, [fontLoaded, fonterr]);
 
-  if(!isConnected) {
+  if (!isConnected) {
     return <NoConnection />;
   }
   if (!appReady || !splashAnimationFinished) {
@@ -63,7 +63,7 @@ const RootLayout = () => {
   return (
     <>
       <StatusBar style="light" />
-      <Stack>
+      <Stack screenOptions={{ animation: "fade_from_bottom" }}>
         <Stack.Screen
           name="index"
           options={{ title: "GWeather", headerShown: false }}
