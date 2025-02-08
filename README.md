@@ -57,5 +57,5 @@ Android 13 <br />
 </div>
   
 ## Sosyal Medya
-- X (Twitter) - https://x.com/gweepcreative
-- Mail - gweepcreative@gmail.com || info@rabelcode.net
+- X (Twitter) - https://x.com/grkndev
+- Mail - info@grkn.dev
