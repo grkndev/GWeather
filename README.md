@@ -19,7 +19,7 @@ Bu proje React Native staj başvurusu için yapılmıştır.
 ## Kurulum
 Bu proje için sisteminizde Expo CLI bulunması gerekmektedir. Detaylı bilgi [Expo CLI](https://docs.expo.dev/more/expo-cli/)
 ```bash
-git clone https://github.com/GweepCreative/GWeather
+git clone https://github.com/grkndev/GWeather
 cd GWeather
 npm i
 npx expo start
